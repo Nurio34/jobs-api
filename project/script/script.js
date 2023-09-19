@@ -2,7 +2,8 @@
 const buttons = document.querySelectorAll("button")
 const msgEl = document.querySelector(".msg")
 
-let res,data,name,token
+let dataArr = []
+
 
 buttons.forEach(btn=>btn.addEventListener("click",async(e)=>{
     
@@ -51,45 +52,19 @@ buttons.forEach(btn=>btn.addEventListener("click",async(e)=>{
 
         case `getAllJobs`:
         
-            token = localStorage.getItem("tokenCreatedByLogin")
-
-            res = await axios.get("/api/v1/jobs",{
-                headers:{
-                    Authorization : `Bearer ${token}`,
-                }
-            })
-
-            data = res.data
-                console.log(data[0].job);
-
-                msgEl.innerHTML = data.map((item,i)=>{
-                   return `
-                        <p>Job ${i} : ${item.job}</p>
-                    `
-                }).join(" ")
+            getAllJobs()
 
             break;
 
         case `createJob`:
         
-            token = localStorage.getItem("tokenCreatedByLogin")
-
-                res = await axios.post("/api/v1/jobs",
-                {
-                    job:"Receptionist"
-                },
-                {
-                    headers:{
-                        Authorization : `Bearer ${token}`,
-                    }
-                })
-                    console.log(res);
-
+            createJob()
+            
             break;
 
         case `getJob`:
         
-
+            getJob()
 
             break;
 
@@ -110,3 +85,88 @@ buttons.forEach(btn=>btn.addEventListener("click",async(e)=>{
             break;
     }
 }))
+
+
+
+
+function getAllJobs(){
+
+    const token = localStorage.getItem("tokenCreatedByLogin")
+
+    axios.get("/api/v1/jobs",{
+        headers:{
+            Authorization : `Bearer ${token}`,
+        }
+     })
+
+     .then((res)=>dataArr = res.data)
+
+     .then(()=>displayJobs())
+
+
+
+}
+
+function displayJobs() {
+
+    const undupArr = []
+
+        dataArr.forEach(item=>{
+            if(!undupArr.includes(item.job)){
+                const itemObj ={
+                    jobId : item._id,
+                    job : item.job
+                }
+                undupArr.push(itemObj)
+            }
+        })
+            console.log(dataArr.length);
+
+        msgEl.innerHTML = undupArr.map((item,i)=>{
+        return `
+                <p id="${item.jobId}">Job ${i+1} : ${item.job}</p>
+            `
+        }).join(" ")
+
+            if(dataArr.length == 1) {
+                msgEl.innerHTML = `
+                <p id="${dataArr[0]._id}">Job: ${dataArr[0].job}</p>
+            `
+            }
+}
+
+function createJob() {
+
+    const token = localStorage.getItem("tokenCreatedByLogin")
+
+        axios.post("/api/v1/jobs",
+            {
+                job:"Web Stupşid"
+            },
+            {
+                headers:{
+                    Authorization : `Bearer ${token}`,
+                }
+        })
+
+        .then(()=>getAllJobs())
+
+}
+
+function getJob() {
+    
+    const token = localStorage.getItem("tokenCreatedByLogin")
+    const id = "6509b438eb8a74f184785123"
+
+        axios.get(`/api/v1/jobs/${id}`,{
+            headers:{
+                Authorization : `Bearer ${token}`,
+            }
+        })
+        .then((res)=>{
+            dataArr = []
+            dataArr.push(res.data)
+            // console.log(dataArr)
+        })
+        .then(()=>displayJobs())
+}

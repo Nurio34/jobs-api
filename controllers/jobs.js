@@ -10,9 +10,9 @@ const getAllJobs = async(req,res)=>{
         
         const {userId,name} = req.user
 
-        const user = await JobsSchema.find({userId})
+        const jobs = await JobsSchema.find({userId})
 
-            res.status(StatusCodes.OK).json(user)
+            res.status(StatusCodes.OK).json(jobs)
     } catch (error) {
         throw new BadRequestError("all is well but Bad Req while Get All Job")
     }
@@ -25,13 +25,21 @@ const createJob = async(req,res)=>{
     const {job} = req.body
     const data = {userId,name,job} 
 
-        await JobsSchema.create(data)
+        const jobs = await JobsSchema.create(data)
+        res.status(StatusCodes.OK).json(jobs)
+
 }
 
 const getJob = async(req,res)=>{
 
     try {
-        res.status(StatusCodes.OK).json({msg:"all is well, Get Job"})
+        const{userId,name} = req.user
+        const jobId = req.params.id
+
+        const job = await JobsSchema.findOne({userId,_id:jobId})
+        
+            res.status(StatusCodes.OK).json(job)
+                console.log(job);
     } catch (error) {
         throw new BadRequestError("all is well but Bad Req while Get Job")
     }
@@ -40,7 +48,8 @@ const getJob = async(req,res)=>{
 const updateJob = async(req,res)=>{
 
     try {
-        res.status(StatusCodes.OK).json({msg:"all is well, Update Job"})
+        
+        
     } catch (error) {
         throw new BadRequestError("all is well but Bad Req while Update Job")
     }
