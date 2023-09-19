@@ -1,0 +1,16 @@
+
+:root {
+    --body : white;
+}
+
+:root:has(body.night) {
+    --body : black;
+}
+
+div {
+    margin: 1rem;
+}
+
+button {
+    margin: 0.4rem;
+}

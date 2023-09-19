@@ -1,0 +1,19 @@
+.special-heading {
+    font-variant: small-caps;
+    position: relative;
+    color: white;
+    text-align: center;
+    line-height: 1;
+    filter: drop-shadow(0 0 5px white);
+
+    &::before {
+        position: absolute;
+        content: "";
+        width: 50%;
+        height: 3px;
+        background-color: rgb(74, 74, 240);;
+        bottom: -0.2rem;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
