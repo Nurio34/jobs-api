@@ -3,6 +3,7 @@ const buttons = document.querySelectorAll("button")
 const msgEl = document.querySelector(".msg")
 
 let dataArr = []
+let res,data,name,token
 
 
 buttons.forEach(btn=>btn.addEventListener("click",async(e)=>{
@@ -13,7 +14,7 @@ buttons.forEach(btn=>btn.addEventListener("click",async(e)=>{
 
             res = await axios.post("/api/v1/auth/register",{
                 name:"Nuri",
-                email:"nuri1@gmail.com",
+                email:"nuri@gmail.com",
                 password:"12345678"
             })
 
@@ -70,13 +71,13 @@ buttons.forEach(btn=>btn.addEventListener("click",async(e)=>{
 
         case `updateJob`:
         
-
+            updateJob()
 
             break;
 
         case `deleteJob`:
         
-
+            deleteJob()
 
             break;
             
@@ -103,6 +104,13 @@ function getAllJobs(){
 
      .then(()=>displayJobs())
 
+     .catch(err=>{
+        dataArr = []
+        dataArr.push(err.response.data)
+        displayJobs()
+     })
+
+
 
 
 }
@@ -120,7 +128,6 @@ function displayJobs() {
                 undupArr.push(itemObj)
             }
         })
-            console.log(dataArr.length);
 
         msgEl.innerHTML = undupArr.map((item,i)=>{
         return `
@@ -129,9 +136,17 @@ function displayJobs() {
         }).join(" ")
 
             if(dataArr.length == 1) {
+
                 msgEl.innerHTML = `
-                <p id="${dataArr[0]._id}">Job: ${dataArr[0].job}</p>
-            `
+                    <p id="${dataArr[0]._id}">Job: ${dataArr[0].job}</p>
+                `
+
+                if(!dataArr.job) {
+                    console.log(dataArr);
+                    msgEl.innerHTML = `
+                    <p >Error : ${dataArr}</p>
+                `
+                }
             }
 }
 
@@ -149,7 +164,10 @@ function createJob() {
                 }
         })
 
-        .then(()=>getAllJobs())
+        .then(res=>{
+            
+            console.log(res);
+            getAllJobs()})
 
 }
 
@@ -166,7 +184,39 @@ function getJob() {
         .then((res)=>{
             dataArr = []
             dataArr.push(res.data)
-            // console.log(dataArr)
         })
         .then(()=>displayJobs())
+}
+
+function updateJob() {
+    const token = localStorage.getItem("tokenCreatedByLogin")
+    const id = "6509a1f01ad1582e3c4c5f7d"
+
+        axios.patch(`/api/v1/jobs/${id}`,
+        {
+            job : "New Job in Amazon"
+        },{
+            headers:{
+                Authorization : `Bearer ${token}`,
+            }
+        })
+        .then(()=>getAllJobs())
+}
+
+function deleteJob() {
+
+    const token = localStorage.getItem("tokenCreatedByLogin")
+    const id = "650901354bcfa5d50321e4a5"
+
+        axios.delete(`/api/v1/jobs/${id}`,{
+            headers : {
+                Authorization : `Bearer ${token}`
+            }
+        })
+
+        .then((res)=>{
+            console.log(res);
+            getAllJobs()
+        })
+        .catch(err => console.log(err))
 }

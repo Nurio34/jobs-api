@@ -15,6 +15,9 @@ const JobSchema = new mongoose.Schema(
             type:String,
             required:[true,"Must be a job"]
         }
+    },
+    {
+        timestamps: true
     }
 )
 
