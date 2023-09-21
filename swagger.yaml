@@ -1,0 +1,270 @@
+openapi: 3.1.0
+info:
+  title: jobs api
+  contact: {}
+  version: '1.0'
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+- url: https://jobs-api-nurio34-65e1ef016449.herokuapp.com/api/v1
+  variables: {}
+- url: http://example.com/jobs
+  variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      summary: Register
+      operationId: Register
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterRequest'
+              - examples:
+                - name: Nuri
+                  email: nuri2@gmail.com
+                  password: '12345678'
+              contentMediaType: application/json
+            example:
+              name: Nuri
+              email: nuri2@gmail.com
+              password: '12345678'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+      servers:
+      - url: https://jobs-api-nurio34-65e1ef016449.herokuapp.com/api/v1
+        variables: {}
+    parameters: []
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters:
+      - name: Authorization
+        in: header
+        description: ''
+        required: false
+        style: simple
+        schema:
+          type: string
+          examples:
+          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTA3NDc0N2NkNDAwNGM1NmZmZDQ1OWEiLCJuYW1lIjoiTnVyaSIsImlhdCI6MTY5NDk4MTEwNSwiZXhwIjoxNjk3NTczMTA1fQ.1hivaqqahVfmpSqHGwwnuoWFEMAA5rYNtLhTP1TsnH0
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LoginRequest'
+              - examples:
+                - email: nuri@gmail.com
+                  password: '12345678'
+              contentMediaType: application/json
+            example:
+              email: nuri@gmail.com
+              password: '12345678'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+      servers:
+      - url: https://jobs-api-nurio34-65e1ef016449.herokuapp.com/api/v1
+        variables: {}
+    parameters: []
+  /jobs:
+    get:
+      tags:
+      - Jobs
+      summary: Get All Jobs
+      operationId: GetAllJobs
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      servers:
+      - url: https://jobs-api-nurio34-65e1ef016449.herokuapp.com/api/v1
+        variables: {}
+    post:
+      tags:
+      - Jobs
+      summary: Create Job
+      operationId: CreateJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateJobRequest'
+              - examples:
+                - userId: 6508e7d6102f6a030f499125
+                  name: Nuri
+                  job: Software Developer
+              contentMediaType: application/json
+            example:
+              userId: 6508e7d6102f6a030f499125
+              name: Nuri
+              job: Software Developer
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      servers:
+      - url: https://jobs-api-nurio34-65e1ef016449.herokuapp.com/api/v1
+        variables: {}
+    parameters: []
+  /jobs/{id}:
+    get:
+      tags:
+      - Jobs
+      summary: Get Job
+      operationId: GetJob
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The user ID
+      
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      servers:
+      - url: http://example.com/jobs
+        variables: {}
+    patch:
+      tags:
+      - Jobs
+      summary: Update Job
+      operationId: UpdateJob
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateJobRequest'
+              - examples:
+                - name: Grapper
+              contentMediaType: application/json
+            example:
+              name: Grapper
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      servers:
+      - url: http://example.com/jobs
+        variables: {}
+        
+    delete:
+      tags:
+      - Jobs
+      summary: Delete Job
+      operationId: DeleteJob
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      servers:
+      - url: http://example.com/jobs
+        variables: {}
+    parameters: []
+components:
+  schemas:
+    RegisterRequest:
+      title: RegisterRequest
+      required:
+      - name
+      - email
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      examples:
+      - name: Nuri
+        email: nuri2@gmail.com
+        password: '12345678'
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      examples:
+      - email: nuri@gmail.com
+        password: '12345678'
+    CreateJobRequest:
+      title: CreateJobRequest
+      required:
+      - userId
+      - name
+      - job
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        job:
+          type: string
+      examples:
+      - userId: 6508e7d6102f6a030f499125
+        name: Nuri
+        job: Software Developer
+    UpdateJobRequest:
+      title: UpdateJobRequest
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+      examples:
+      - name: Grapper
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+security:
+- httpBearer: []
+tags:
+- name: Auth
+- name: Jobs

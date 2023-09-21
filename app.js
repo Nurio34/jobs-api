@@ -24,6 +24,14 @@ app.use(rateLimiter({
 	// store: ... , // Use an external store for more precise rate limiting
 }))
 
+const swaggerUI = require("swagger-ui-express")
+const YAML = require("yamljs")
+const swaggerDocument = YAML.load("./swagger.yaml")
+
+  app.use(express.static("./project"))
+
+  app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+
 const AuthRouter = require("./routes/auth")
   app.use("/api/v1/auth",AuthRouter)
 const authMidd = require("./middleware/authentication")
